@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.controller.exception;
+package com.example.hubspotintegrationapi.exceptions;
 
 import lombok.Getter;
 

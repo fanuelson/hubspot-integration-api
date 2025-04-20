@@ -1,8 +1,7 @@
 package com.example.hubspotintegrationapi.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -29,11 +28,10 @@ public class HubspotWebhookController {
       @RequestBody String rawBody,
       HttpServletRequest request) {
 
-    if (!isValidTimestamp(timestamp) || !isValidSignature(signature, timestamp, rawBody)) {
+    if (!isValidTimestamp(timestamp) || !isValidSignature(signature, request, timestamp, rawBody)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    ObjectMapper mapper = new ObjectMapper();
     try {
       log.info("Webhook recebido: {}", rawBody);
     } catch (Exception e) {
@@ -48,18 +46,32 @@ public class HubspotWebhookController {
     return Math.abs(durationInMinutes) < 5;
   }
 
-  private boolean isValidSignature(String signature, Long timestamp, String body) {
+  private boolean isValidSignature(
+      String signature, HttpServletRequest request, Long timestamp, String rawBody) {
     try {
-      String base = timestamp + "." + body;
-      Mac hmacSha256 = Mac.getInstance("HmacSHA256");
-      SecretKeySpec keySpec =
-          new SecretKeySpec(clientSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-      hmacSha256.init(keySpec);
-      byte[] rawHmac = hmacSha256.doFinal(base.getBytes(StandardCharsets.UTF_8));
-      String expected = Base64.getEncoder().encodeToString(rawHmac);
-      return expected.equals(signature);
+      String uri = request.getRequestURL().toString();
+
+      // String que será assinada
+      String rawString = request.getMethod() + uri + rawBody + timestamp;
+
+      // Gera o hash com HMAC SHA256 + base64
+      String hashedString = generateHmacSHA256Base64(rawString, clientSecret);
+
+      return MessageDigest.isEqual(hashedString.getBytes(), signature.getBytes());
     } catch (Exception e) {
       return false;
+    }
+  }
+
+  private String generateHmacSHA256Base64(String data, String secret) {
+    try {
+      Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+      SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+      sha256_HMAC.init(secretKey);
+      byte[] hashBytes = sha256_HMAC.doFinal(data.getBytes());
+      return Base64.getEncoder().encodeToString(hashBytes);
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao gerar HMAC SHA256", e);
     }
   }
 }
