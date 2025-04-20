@@ -1,7 +1,7 @@
 package com.example.hubspotintegrationapi.controller;
 
-import com.example.hubspotintegrationapi.dto.ContactRequest;
-import com.example.hubspotintegrationapi.dto.ContactResponse;
+import com.example.hubspotintegrationapi.dto.CreateContactRequest;
+import com.example.hubspotintegrationapi.dto.CreateContactResponse;
 import com.example.hubspotintegrationapi.service.HubspotContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class ContactController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
-  public ContactResponse saveContact(@RequestBody ContactRequest request) {
+  public CreateContactResponse saveContact(@RequestBody CreateContactRequest request) {
     return contactService.createContact(request);
   }
 }
