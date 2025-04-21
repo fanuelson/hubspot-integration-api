@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.config;
+package com.example.hubspotintegrationapi.config.restclient;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

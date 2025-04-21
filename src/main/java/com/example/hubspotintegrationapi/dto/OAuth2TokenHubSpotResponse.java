@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.controller;
+package com.example.hubspotintegrationapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

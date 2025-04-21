@@ -1,12 +1,12 @@
 package com.example.hubspotintegrationapi.controller;
 
-import com.example.hubspotintegrationapi.constants.HubSpotConstants;
+import com.example.hubspotintegrationapi.dto.OAuth2TokenHubSpotResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -30,20 +30,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OAuthController {
 
+  private static final String CLIENT_REGISTRATION_ID = "hubspot";
   private final ClientRegistrationRepository clientRegistrationRepository;
   private final OAuth2AuthorizedClientRepository authorizedClientRepository;
-
-  @Value("${spring.security.oauth2.client.registration.hubspot.client-id}")
-  private String clientId;
-
-  @Value("${spring.security.oauth2.client.registration.hubspot.client-secret}")
-  private String clientSecret;
-
-  @Value("${spring.security.oauth2.client.registration.hubspot.redirect-uri}")
-  private String redirectUriTemplate;
-
-  @Value("${spring.security.oauth2.client.provider.hubspot.token-uri}")
-  private String tokenUri;
 
   @GetMapping("/authorize")
   @ResponseStatus(HttpStatus.OK)
@@ -67,6 +56,12 @@ public class OAuthController {
   @ResponseStatus(HttpStatus.OK)
   public OAuth2TokenHubSpotResponse callback(
       @RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
+    ClientRegistration registration = getClientRegistrationHubSpot();
+    val redirectUriTemplate = registration.getRedirectUri();
+    val clientId = registration.getClientId();
+    val clientSecret = registration.getClientSecret();
+    val tokenUri = registration.getProviderDetails().getTokenUri();
+
     String baseUrl = getBaseUrl(request);
     String redirectUri = redirectUriTemplate.replace("{baseUrl}", baseUrl);
 
@@ -115,6 +110,6 @@ public class OAuthController {
   }
 
   private ClientRegistration getClientRegistrationHubSpot() {
-    return clientRegistrationRepository.findByRegistrationId(HubSpotConstants.HUBSPOT);
+    return clientRegistrationRepository.findByRegistrationId(CLIENT_REGISTRATION_ID);
   }
 }

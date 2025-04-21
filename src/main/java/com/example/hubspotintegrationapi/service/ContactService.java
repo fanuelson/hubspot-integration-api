@@ -13,7 +13,11 @@ import org.springframework.web.client.RestClient;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class HubspotContactService {
+public class ContactService {
+
+  private static final String CLIENT_REGISTRATION_ID = "hubspot";
+  private static final String HUBSPOT_BASE_URL = "https://api.hubapi.com";
+  private static final String CONTACTS_RESOURCE = "/crm/v3/objects/contacts";
 
   private final RestClient restClient;
 
@@ -22,13 +26,15 @@ public class HubspotContactService {
         Map.of(
             "properties",
             Map.of(
-                "email", UUID.randomUUID().toString() + createContact.email(),
+                "email", UUID.randomUUID() + createContact.email(),
                 "firstname", createContact.firstname(),
                 "lastname", createContact.lastname()));
     return restClient
         .post()
-        .uri("https://api.hubapi.com/crm/v3/objects/contacts")
-        .attributes(RequestAttributeClientRegistrationIdResolver.clientRegistrationId("hubspot"))
+        .uri(HUBSPOT_BASE_URL + CONTACTS_RESOURCE)
+        .attributes(
+            RequestAttributeClientRegistrationIdResolver.clientRegistrationId(
+                CLIENT_REGISTRATION_ID))
         .body(createContactBody)
         .retrieve()
         .body(CreateContactResponse.class);
