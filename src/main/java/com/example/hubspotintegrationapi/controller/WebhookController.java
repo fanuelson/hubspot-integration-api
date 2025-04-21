@@ -24,7 +24,7 @@ public class WebhookController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public ResponseEntity<Void> handleWebhook(
+  public void handleWebhook(
       @RequestHeader("X-HubSpot-Signature") String signature,
       @RequestHeader("X-HubSpot-Request-Timestamp") Long timestamp,
       @RequestBody String rawBody,
@@ -39,7 +39,6 @@ public class WebhookController {
     } catch (Exception e) {
       log.error("Erro ao processar webhook", e);
     }
-    return ResponseEntity.ok().build();
   }
 
   private boolean isValidTimestamp(final Long timestamp) {

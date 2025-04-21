@@ -37,7 +37,7 @@ public class OAuthController {
 
   @GetMapping("/authorize")
   @ResponseStatus(HttpStatus.OK)
-  public String authorizationUrl(HttpServletRequest request) {
+  public String authorize(HttpServletRequest request) {
     ClientRegistration registration = getClientRegistrationHubSpot();
     String baseUrl = getBaseUrl(request);
     String redirectUri = registration.getRedirectUri().replace("{baseUrl}", baseUrl);

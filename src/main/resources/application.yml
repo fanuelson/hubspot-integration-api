@@ -15,6 +15,9 @@ spring:
           hubspot:
             authorization-uri: https://app.hubspot.com/oauth/authorize
             token-uri: https://api.hubapi.com/oauth/v1/token
+  devtools:
+    restart:
+      enabled: true
 
 server:
   port: 8080

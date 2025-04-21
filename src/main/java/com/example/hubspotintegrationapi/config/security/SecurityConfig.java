@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -24,6 +25,11 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .oauth2Client(Customizer.withDefaults());
     return http.build();
+  }
+
+  @Bean
+  public OAuth2AuthorizedClientRepository authorizedClientRepository() {
+    return new HttpSessionOAuth2AuthorizedClientRepository();
   }
 
   @Bean

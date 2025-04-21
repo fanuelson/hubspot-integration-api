@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.oauth2.client.web.client.RequestAttributeClientRegistrationIdResolver;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -16,7 +15,6 @@ import org.springframework.web.client.RestClient;
 public class ContactService {
 
   private static final String CLIENT_REGISTRATION_ID = "hubspot";
-  private static final String HUBSPOT_BASE_URL = "https://api.hubapi.com";
   private static final String CONTACTS_RESOURCE = "/crm/v3/objects/contacts";
 
   private final RestClient restClient;
@@ -31,10 +29,7 @@ public class ContactService {
                 "lastname", createContact.lastname()));
     return restClient
         .post()
-        .uri(HUBSPOT_BASE_URL + CONTACTS_RESOURCE)
-        .attributes(
-            RequestAttributeClientRegistrationIdResolver.clientRegistrationId(
-                CLIENT_REGISTRATION_ID))
+        .uri(CONTACTS_RESOURCE)
         .body(createContactBody)
         .retrieve()
         .body(CreateContactResponse.class);
