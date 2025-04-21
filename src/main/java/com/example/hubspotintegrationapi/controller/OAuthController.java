@@ -30,7 +30,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OAuthController {
 
-  private static final String CLIENT_REGISTRATION_ID = "hubspot";
+  private static final String REGISTRATION_ID = "hubspot";
+
   private final ClientRegistrationRepository clientRegistrationRepository;
   private final OAuth2AuthorizedClientRepository authorizedClientRepository;
 
@@ -110,6 +111,6 @@ public class OAuthController {
   }
 
   private ClientRegistration getClientRegistrationHubSpot() {
-    return clientRegistrationRepository.findByRegistrationId(CLIENT_REGISTRATION_ID);
+    return clientRegistrationRepository.findByRegistrationId(REGISTRATION_ID);
   }
 }
