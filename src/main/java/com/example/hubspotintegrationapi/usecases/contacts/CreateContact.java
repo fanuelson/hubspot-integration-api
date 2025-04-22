@@ -1,8 +1,7 @@
 package com.example.hubspotintegrationapi.usecases.contacts;
 
-import com.example.hubspotintegrationapi.domain.CreateContactRequest;
-import com.example.hubspotintegrationapi.domain.CreateContactResponse;
-import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClient;
+import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CreateContact {
 
-  private final ContactsRestClient<CreateContactRequest, CreateContactResponse> contactsRestClient;
+  private final ContactsRestClientGateway contactsRestClientGateway;
 
-  public CreateContactResponse execute(final CreateContactRequest createContactRequest) {
-    return contactsRestClient.create(createContactRequest);
+  public Contact execute(final Contact contact) {
+    return contactsRestClientGateway.create(contact).orElseThrow();
   }
 }

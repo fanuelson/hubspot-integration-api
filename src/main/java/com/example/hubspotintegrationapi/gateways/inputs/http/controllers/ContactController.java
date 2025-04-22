@@ -1,9 +1,10 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.controllers;
 
-import com.example.hubspotintegrationapi.domain.CreateContactRequest;
-import com.example.hubspotintegrationapi.domain.CreateContactResponse;
+import com.example.hubspotintegrationapi.gateways.inputs.http.resources.request.CreateContactRequest;
+import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.CreateContactResponse;
 import com.example.hubspotintegrationapi.usecases.contacts.CreateContact;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,8 @@ public class ContactController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
-  public CreateContactResponse saveContact(@RequestBody CreateContactRequest request) {
-    return createContact.execute(request);
+  public CreateContactResponse create(@RequestBody CreateContactRequest request) {
+    val contact = createContact.execute(request.toDomain());
+    return new CreateContactResponse(contact);
   }
 }

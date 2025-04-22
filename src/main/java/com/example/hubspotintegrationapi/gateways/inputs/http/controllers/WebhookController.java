@@ -1,7 +1,7 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.controllers;
 
 import com.example.hubspotintegrationapi.domain.events.EventType;
-import com.example.hubspotintegrationapi.gateways.inputs.http.resources.WebhookPayload;
+import com.example.hubspotintegrationapi.gateways.inputs.http.resources.request.WebhookPayload;
 import com.example.hubspotintegrationapi.usecases.events.GetEventHandler;
 import com.example.hubspotintegrationapi.utils.JsonUtils;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.gateways.inputs.http.resources;
+package com.example.hubspotintegrationapi.gateways.inputs.http.resources.request;
 
 import com.example.hubspotintegrationapi.domain.events.EventPayload;
 import com.example.hubspotintegrationapi.domain.events.EventType;
