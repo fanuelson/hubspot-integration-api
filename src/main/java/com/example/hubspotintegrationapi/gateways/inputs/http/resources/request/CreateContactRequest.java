@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 public class CreateContactRequest {
 
   @NotBlank private final String email;
-  private final String firstName;
-  private final String lastName;
+  @NotBlank private final String firstName;
+  @NotBlank private final String lastName;
 
   public Contact toDomain() {
     return Contact.builder().email(email).firstName(firstName).lastName(lastName).build();

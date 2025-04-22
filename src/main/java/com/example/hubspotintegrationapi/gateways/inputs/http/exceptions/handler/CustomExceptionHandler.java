@@ -3,14 +3,18 @@ package com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.handle
 import com.example.hubspotintegrationapi.exceptions.NotFoundException;
 import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.ErrorResponse;
 import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.HubspotErrorResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
@@ -53,8 +57,24 @@ public class CustomExceptionHandler {
 
   @ExceptionHandler({ResponseStatusException.class})
   public ResponseEntity<ErrorResponse> handleResponseStatusException(
-          final ResponseStatusException ex) {
+      final ResponseStatusException ex) {
     log(ex);
     return new ResponseEntity<>(createErrorResponse(ex), ex.getStatusCode());
+  }
+
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<Map<String, List<String>>> handleValidationErrors(
+      MethodArgumentNotValidException ex) {
+    List<String> errors =
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(field -> "%s %s".formatted(field.getField(), field.getDefaultMessage()))
+            .toList();
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+  }
+
+  private Map<String, List<String>> getErrorsMap(List<String> errors) {
+    Map<String, List<String>> errorResponse = new HashMap<>();
+    errorResponse.put("errors", errors);
+    return errorResponse;
   }
 }
