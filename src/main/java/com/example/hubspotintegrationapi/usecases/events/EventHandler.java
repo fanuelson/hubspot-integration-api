@@ -1,5 +1,7 @@
 package com.example.hubspotintegrationapi.usecases.events;
 
+import com.example.hubspotintegrationapi.domain.events.EventPayload;
+
 public interface EventHandler {
-    void handle(String payload);
+    void handle(EventPayload payload);
 }

@@ -6,12 +6,17 @@ import com.example.hubspotintegrationapi.usecases.events.GetEventHandler;
 import com.example.hubspotintegrationapi.utils.JsonUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.servlet.http.HttpServletRequest;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 import java.util.List;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,15 +28,20 @@ public class WebhookController {
 
   private final GetEventHandler getEventHandler;
 
+  @Value("${spring.security.oauth2.client.registration.hubspot.client-secret}")
+  private String clientSecret;
+
   @PostMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void handleWebhook(
-      @RequestHeader("X-HubSpot-Signature") String signature,
+      @RequestHeader("X-HubSpot-Signature-v3") String signatureV3,
       @RequestHeader("X-HubSpot-Request-Timestamp") Long timestamp,
       @RequestBody String rawBody,
       HttpServletRequest request) {
     log.info("Webhook recebido: {}", rawBody);
-    if (!isValidTimestamp(timestamp) || !isValidSignature(signature, request, timestamp, rawBody)) {
+
+    if (!isValidTimestamp(timestamp)
+        || !isValidSignature(signatureV3, request, timestamp, rawBody)) {
       throw new RuntimeException("Invalid signature");
     }
 
@@ -43,11 +53,11 @@ public class WebhookController {
           webhookPayloads ->
               webhookPayloads.forEach(
                   (webhookPayload -> {
-                    EventType.get(webhookPayload.getSubscriptionType())
+                    EventType.getOptional(webhookPayload.getSubscriptionType())
                         .ifPresent(
                             (eventType -> {
                               val handler = getEventHandler.execute(eventType);
-                              handler.handle(rawBody);
+                              handler.handle(webhookPayload.toDomain());
                             }));
                   })));
 
@@ -63,8 +73,29 @@ public class WebhookController {
   }
 
   private boolean isValidSignature(
-      String signature, HttpServletRequest request, Long timestamp, String rawBody) {
-    // TODO: Implementar validação de segurança do hubspot
+      String signatureV3, HttpServletRequest request, Long timestamp, String rawBody) {
+    // Monta a URI original
+    String uri = request.getRequestURL().toString();
+    // String que será assinada
+    String rawString = request.getMethod() + uri + rawBody + timestamp;
+
+    // Gera o hash com HMAC SHA256 + base64
+    String hashedString = generateHmacSHA256Base64(rawString, clientSecret);
+
+    // FIXME: Not working
+    val isValidSignature = MessageDigest.isEqual(hashedString.getBytes(), signatureV3.getBytes());
     return true;
+  }
+
+  private String generateHmacSHA256Base64(String data, String secret) {
+    try {
+      Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+      SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "HmacSHA256");
+      sha256_HMAC.init(secretKey);
+      byte[] hashBytes = sha256_HMAC.doFinal(data.getBytes());
+      return Base64.getEncoder().encodeToString(hashBytes);
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao gerar HMAC SHA256", e);
+    }
   }
 }

@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.gateways.inputs.http.config;
+package com.example.hubspotintegrationapi.config.swagger;
 
 import org.springframework.context.annotation.Configuration;
 

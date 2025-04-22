@@ -1,6 +1,7 @@
 package com.example.hubspotintegrationapi.usecases.events;
 
 import com.example.hubspotintegrationapi.domain.events.EventType;
+import com.example.hubspotintegrationapi.exceptions.NotFoundException;
 import com.example.hubspotintegrationapi.usecases.companies.events.CompanyCreationHandler;
 import com.example.hubspotintegrationapi.usecases.contacts.events.ContactCreationHandler;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class GetEventHandler {
           aplApplicationContext.getBean(ContactCreationHandler.class);
       case EventType.COMPANY_CREATION ->
           aplApplicationContext.getBean(CompanyCreationHandler.class);
-      default -> throw new RuntimeException("Handler not implemented for event: " + eventType);
+      default -> throw new NotFoundException("Handler not found for event: " + eventType);
     };
   }
 }
