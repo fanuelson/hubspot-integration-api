@@ -4,18 +4,22 @@ import com.example.hubspotintegrationapi.domain.Contact;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 
-@RequiredArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class CreateContactRequestProperties {
 
+  @JsonProperty("email")
   private final String email;
+
   @JsonProperty("firstname")
   private final String firstName;
+
   @JsonProperty("lastname")
   private final String lastName;
 
-  public CreateContactRequestProperties(final Contact contact) {
+  public CreateContactRequestProperties(@NonNull final Contact contact) {
     this.email = contact.getEmail();
     this.firstName = contact.getFirstName();
     this.lastName = contact.getLastName();

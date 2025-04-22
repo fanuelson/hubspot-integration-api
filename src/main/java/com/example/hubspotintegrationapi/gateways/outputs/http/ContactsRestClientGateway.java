@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface ContactsRestClientGateway {
   Optional<Contact> create(Contact input);
+  Optional<Contact> findByEmail(String email);
 }

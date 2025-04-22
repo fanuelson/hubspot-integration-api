@@ -6,6 +6,7 @@ import com.example.hubspotintegrationapi.usecases.companies.events.CompanyCreati
 import com.example.hubspotintegrationapi.usecases.contacts.events.ContactCreationHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,13 +15,14 @@ public class GetEventHandler {
 
   private final ApplicationContext aplApplicationContext;
 
-  public EventHandler execute(final EventType eventType) {
+  public EventHandler execute(@NonNull final EventType eventType) {
     return switch (eventType) {
       case EventType.CONTACT_CREATION ->
           aplApplicationContext.getBean(ContactCreationHandler.class);
       case EventType.COMPANY_CREATION ->
           aplApplicationContext.getBean(CompanyCreationHandler.class);
-      default -> throw new NotFoundException("Handler not found for event: " + eventType);
+      default ->
+          throw new NotFoundException(String.format("Handler not found for event: %s", eventType));
     };
   }
 }

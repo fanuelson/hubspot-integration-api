@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 @Slf4j
@@ -47,5 +49,12 @@ public class CustomExceptionHandler {
       final OAuth2AuthorizationException ex) {
     log(ex);
     return new ResponseEntity<>(createErrorResponse(ex), HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler({ResponseStatusException.class})
+  public ResponseEntity<ErrorResponse> handleResponseStatusException(
+          final ResponseStatusException ex) {
+    log(ex);
+    return new ResponseEntity<>(createErrorResponse(ex), ex.getStatusCode());
   }
 }

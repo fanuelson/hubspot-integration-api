@@ -5,8 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Properties<T> {
+@AllArgsConstructor
+public class PropertiesWrapper<T> {
   private T properties;
+
+  public static <T> PropertiesWrapper<T> create(T prop) {
+    return new PropertiesWrapper<>(prop);
+  }
 }

@@ -6,6 +6,7 @@ import com.example.hubspotintegrationapi.usecases.contacts.CreateContact;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class ContactController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
-  public CreateContactResponse create(@RequestBody CreateContactRequest request) {
+  public CreateContactResponse create(@RequestBody final CreateContactRequest request) {
     val contact = createContact.execute(request.toDomain());
     return new CreateContactResponse(contact);
   }
