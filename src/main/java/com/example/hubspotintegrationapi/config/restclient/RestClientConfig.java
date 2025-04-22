@@ -1,5 +1,6 @@
 package com.example.hubspotintegrationapi.config.restclient;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
@@ -8,10 +9,11 @@ import org.springframework.security.oauth2.client.web.client.RequestAttributeCli
 import org.springframework.web.client.RestClient;
 
 @Configuration
+@RequiredArgsConstructor
 public class RestClientConfig {
 
-  private static final String HUBSPOT_BASE_URL = "https://api.hubapi.com";
   private static final String CLIENT_REGISTRATION_ID = "hubspot";
+  private final HubspotRestClientProp hubspotRestClientProp;
 
   @Bean
   public RestClient restClient(OAuth2AuthorizedClientManager authorizedClientManager) {
@@ -24,7 +26,7 @@ public class RestClientConfig {
                         CLIENT_REGISTRATION_ID)
                     .accept(request.getAttributes()))
         .requestInterceptor(interceptor)
-        .baseUrl(HUBSPOT_BASE_URL)
+        .baseUrl(hubspotRestClientProp.getApiUrl())
         .build();
   }
 }

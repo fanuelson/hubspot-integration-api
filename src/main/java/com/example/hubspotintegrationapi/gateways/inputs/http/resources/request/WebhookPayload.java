@@ -2,15 +2,22 @@ package com.example.hubspotintegrationapi.gateways.inputs.http.resources.request
 
 import com.example.hubspotintegrationapi.domain.events.EventPayload;
 import com.example.hubspotintegrationapi.domain.events.EventType;
+import java.io.Serial;
+import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class WebhookPayload {
-  private final String subscriptionType;
-  private final String eventId;
+public class WebhookPayload implements Serializable {
+
+  @Serial private static final long serialVersionUID = 1L;
+
+  private String subscriptionType;
+  private String eventId;
 
   public EventPayload toDomain(@NonNull final EventPayload eventPayload) {
     return eventPayload

@@ -1,5 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.outputs.http.impl;
 
+import com.example.hubspotintegrationapi.config.restclient.HubspotRestClientProp;
 import com.example.hubspotintegrationapi.domain.Contact;
 import com.example.hubspotintegrationapi.domain.PropertiesWrapper;
 import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
@@ -16,7 +17,8 @@ import org.springframework.web.client.RestClient;
 @RequiredArgsConstructor
 public class ContactsRestClientGatewayImpl implements ContactsRestClientGateway {
 
-  private static final String CONTACTS_RESOURCE = "/crm/v3/objects/contacts";
+  private final HubspotRestClientProp hubspotRestClientProp;
+
   private final RestClient restClient;
 
   @Override
@@ -25,7 +27,7 @@ public class ContactsRestClientGatewayImpl implements ContactsRestClientGateway 
     val response =
         restClient
             .post()
-            .uri(CONTACTS_RESOURCE)
+            .uri(hubspotRestClientProp.getContactsResource())
             .body(PropertiesWrapper.create(properties))
             .retrieve()
             .body(CreateContactResponse.class);
