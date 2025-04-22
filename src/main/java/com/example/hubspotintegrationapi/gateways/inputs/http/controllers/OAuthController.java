@@ -1,9 +1,13 @@
-package com.example.hubspotintegrationapi.controller;
+package com.example.hubspotintegrationapi.gateways.inputs.http.controllers;
 
-import com.example.hubspotintegrationapi.dto.OAuth2TokenHubSpotResponse;
+import com.example.hubspotintegrationapi.domain.OAuth2TokenHubSpotResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 import java.time.Instant;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +45,8 @@ public class OAuthController {
     ClientRegistration registration = getClientRegistrationHubSpot();
     String baseUrl = getBaseUrl(request);
     String redirectUri = registration.getRedirectUri().replace("{baseUrl}", baseUrl);
-
+    // TODO: create validation
+    Objects.requireNonNull(registration.getScopes(), "Missing scopes");
     return UriComponentsBuilder.fromUriString(
             registration.getProviderDetails().getAuthorizationUri())
         .queryParam(OAuth2ParameterNames.CLIENT_ID, registration.getClientId())
@@ -55,8 +60,19 @@ public class OAuthController {
 
   @GetMapping("/callback")
   @ResponseStatus(HttpStatus.OK)
-  public OAuth2TokenHubSpotResponse callback(
-      @RequestParam String code, HttpServletRequest request, HttpServletResponse response) {
+  public void callback(
+      @RequestParam(required = false) String code,
+      @RequestParam(required = false) String error,
+      @RequestParam(required = false) String errorDescription,
+      HttpServletRequest request,
+      HttpServletResponse response)
+      throws IOException {
+    // TODO: create validation
+    if (Objects.nonNull(error)) {
+      response.getWriter().println(error);
+      return;
+    }
+
     ClientRegistration registration = getClientRegistrationHubSpot();
     val redirectUriTemplate = registration.getRedirectUri();
     val clientId = registration.getClientId();
@@ -103,7 +119,7 @@ public class OAuthController {
     // Salva o OAuth2AuthorizedClient no contexto de segurança
     authorizedClientRepository.saveAuthorizedClient(authorizedClient, principal, request, response);
 
-    return oAuth2TokenHubSpotResponse;
+    response.sendRedirect(request.getContextPath() + "/swagger-ui/index.html");
   }
 
   private String getBaseUrl(HttpServletRequest request) {

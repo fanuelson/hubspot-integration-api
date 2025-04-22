@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.controller.exception;
+package com.example.hubspotintegrationapi.gateways.inputs.http.exceptions;
 
 public class HubspotException extends RuntimeException {
 

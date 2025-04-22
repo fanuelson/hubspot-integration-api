@@ -1,19 +1,18 @@
-package com.example.hubspotintegrationapi.controller;
+package com.example.hubspotintegrationapi.gateways.inputs.http.controllers;
 
+import com.example.hubspotintegrationapi.domain.events.EventType;
+import com.example.hubspotintegrationapi.gateways.inputs.http.resources.WebhookPayload;
+import com.example.hubspotintegrationapi.usecases.events.GetEventHandler;
+import com.example.hubspotintegrationapi.utils.JsonUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.servlet.http.HttpServletRequest;
-import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class WebhookController {
 
+  private final GetEventHandler getEventHandler;
+
   @PostMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void handleWebhook(
@@ -29,13 +30,27 @@ public class WebhookController {
       @RequestHeader("X-HubSpot-Request-Timestamp") Long timestamp,
       @RequestBody String rawBody,
       HttpServletRequest request) {
-
+    log.info("Webhook recebido: {}", rawBody);
     if (!isValidTimestamp(timestamp) || !isValidSignature(signature, request, timestamp, rawBody)) {
       throw new RuntimeException("Invalid signature");
     }
 
+    val optionalPayloads =
+        JsonUtils.toObject(rawBody, new TypeReference<List<WebhookPayload>>() {});
+
     try {
-      log.info("Webhook recebido: {}", rawBody);
+      optionalPayloads.ifPresent(
+          webhookPayloads ->
+              webhookPayloads.forEach(
+                  (webhookPayload -> {
+                    EventType.get(webhookPayload.getSubscriptionType())
+                        .ifPresent(
+                            (eventType -> {
+                              val handler = getEventHandler.execute(eventType);
+                              handler.handle(rawBody);
+                            }));
+                  })));
+
     } catch (Exception e) {
       log.error("Erro ao processar webhook", e);
     }
@@ -52,5 +67,4 @@ public class WebhookController {
     // TODO: Implementar validação de segurança do hubspot
     return true;
   }
-
 }

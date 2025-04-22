@@ -1,6 +1,6 @@
-package com.example.hubspotintegrationapi.controller.exception.handler;
+package com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.handler;
 
-import com.example.hubspotintegrationapi.controller.exception.HubspotException;
+import com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.HubspotException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

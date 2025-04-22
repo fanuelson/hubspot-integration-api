@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.dto;
+package com.example.hubspotintegrationapi.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
