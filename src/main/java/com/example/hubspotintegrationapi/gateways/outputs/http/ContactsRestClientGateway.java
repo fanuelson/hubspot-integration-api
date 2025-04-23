@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.outputs.http;
 
-import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
 
 import java.util.Optional;
 

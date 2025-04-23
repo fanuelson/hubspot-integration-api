@@ -1,7 +1,7 @@
 package com.example.hubspotintegrationapi.gateways.outputs.http.resources;
 
-import com.example.hubspotintegrationapi.domain.Contact;
-import com.example.hubspotintegrationapi.domain.PropertiesWrapper;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
+import com.example.hubspotintegrationapi.domain.wrappers.PropertiesWrapper;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import lombok.AllArgsConstructor;

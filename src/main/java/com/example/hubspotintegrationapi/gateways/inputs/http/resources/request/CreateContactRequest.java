@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.resources.request;
 
-import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

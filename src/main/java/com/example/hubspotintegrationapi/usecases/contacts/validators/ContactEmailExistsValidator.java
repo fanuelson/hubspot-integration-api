@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.usecases.contacts.validators;
 
-import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.domain.validation.Validator;

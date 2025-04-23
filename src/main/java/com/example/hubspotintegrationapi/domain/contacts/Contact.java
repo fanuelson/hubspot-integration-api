@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.domain;
+package com.example.hubspotintegrationapi.domain.contacts;
 
 import lombok.*;
 

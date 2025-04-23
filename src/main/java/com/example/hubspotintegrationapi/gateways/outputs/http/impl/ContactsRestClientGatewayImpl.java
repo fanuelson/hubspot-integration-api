@@ -1,8 +1,8 @@
 package com.example.hubspotintegrationapi.gateways.outputs.http.impl;
 
 import com.example.hubspotintegrationapi.config.restclient.HubspotRestClientProp;
-import com.example.hubspotintegrationapi.domain.Contact;
-import com.example.hubspotintegrationapi.domain.PropertiesWrapper;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
+import com.example.hubspotintegrationapi.domain.wrappers.PropertiesWrapper;
 import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactRequestProperties;
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactResponse;

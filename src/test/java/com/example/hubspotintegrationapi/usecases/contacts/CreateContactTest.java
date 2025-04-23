@@ -1,16 +1,15 @@
-package com.example.hubspotintegrationapi.usecases;
+package com.example.hubspotintegrationapi.usecases.contacts;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
 import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
-import com.example.hubspotintegrationapi.mock.ContactMock;
-import com.example.hubspotintegrationapi.usecases.contacts.CreateContact;
+import com.example.hubspotintegrationapi.mocks.ContactMocks;
 import com.example.hubspotintegrationapi.usecases.contacts.validators.ContactEmailExistsValidator;
 import java.util.Optional;
 import lombok.val;
@@ -34,7 +33,7 @@ class CreateContactTest {
 
   @Test
   void shouldThrowErrorIfRestClientNotAuthorized() {
-    val createContactInput = ContactMock.createContactValidMock();
+    val createContactInput = ContactMocks.createContactValidMock();
 
     when(contactEmailExistsValidator.validate(any())).thenReturn(Optional.empty());
     when(contactsRestClientGateway.create(any(Contact.class)))
@@ -46,7 +45,7 @@ class CreateContactTest {
   @Test
   void shouldThrowErrorIfInvalidEmailAddress() {
     val invalidEmail = "invalid";
-    val createContactInput = ContactMock.createContactValidMock().withEmail(invalidEmail);
+    val createContactInput = ContactMocks.createContactValidMock().withEmail(invalidEmail);
 
     when(contactEmailExistsValidator.validate(any())).thenReturn(Optional.empty());
     when(contactsRestClientGateway.create(any(Contact.class)))
@@ -58,7 +57,7 @@ class CreateContactTest {
   @Test
   void shouldThrowErrorIfContactEmailAlreadyExists() {
     val existingEmail = "test@gmail.com";
-    val createContactInput = ContactMock.createContactValidMock().withEmail(existingEmail);
+    val createContactInput = ContactMocks.createContactValidMock().withEmail(existingEmail);
 
     when(contactEmailExistsValidator.validate(existingEmail))
         .thenReturn(
@@ -69,7 +68,7 @@ class CreateContactTest {
 
   @Test
   void shouldCreateContact() {
-    val createContactInput = ContactMock.createContactValidMock();
+    val createContactInput = ContactMocks.createContactValidMock();
     val expectedCreateContactOutput = createContactInput.withId("1");
 
     when(contactEmailExistsValidator.validate(any())).thenReturn(Optional.empty());

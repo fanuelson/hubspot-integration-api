@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.usecases.contacts;
 
-import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
 import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
 import com.example.hubspotintegrationapi.usecases.contacts.validators.ContactEmailExistsValidator;

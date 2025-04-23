@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.handler;
+package com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.handlers;
 
 import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
 import com.example.hubspotintegrationapi.exceptions.NotFoundException;

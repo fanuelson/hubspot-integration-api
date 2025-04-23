@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.domain;
+package com.example.hubspotintegrationapi.domain.wrappers;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

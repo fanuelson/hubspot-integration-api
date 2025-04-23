@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.resources.response;
 
-import com.example.hubspotintegrationapi.domain.Contact;
+import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
