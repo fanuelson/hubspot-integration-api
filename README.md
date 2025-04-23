@@ -6,6 +6,7 @@
 
 ## Prerequisites
 
+- Ngrok (https://ngrok.com/docs/getting-started/)
 - Docker
 - Docker compose 2
 
@@ -19,6 +20,14 @@ $ docker compose up -d
 
 Access:
 http://localhost:8080/swagger-ui/index.html
+
+3. Usar ngrok para registar webhook para o localhost
+```ngrok http http://localhost:8080```
+![img.png](img.png)
+
+4. Copiar fowarding url e adicionar a assinatura do hubspot
+Exemplo: ```a.b.c.ngrok-free.app/webhook```
+![img_1.png](img_1.png)
 
 ## Using
 - Clean Arquitecture
