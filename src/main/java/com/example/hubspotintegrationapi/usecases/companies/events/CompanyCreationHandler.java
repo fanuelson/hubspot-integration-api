@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+// Exemplo de uma futura nova funcionalidade
 @Slf4j
 @Service
 @RequiredArgsConstructor

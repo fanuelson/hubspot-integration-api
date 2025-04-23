@@ -37,6 +37,7 @@ public class ContactsRestClientGatewayImpl implements ContactsRestClientGateway 
 
   @Override
   public Optional<Contact> findByEmail(String email) {
+    // TODO: Buscar contato no hubspot pelo email
     return Optional.empty();
   }
 }

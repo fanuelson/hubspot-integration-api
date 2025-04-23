@@ -1,13 +1,11 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.handler;
 
+import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
 import com.example.hubspotintegrationapi.exceptions.NotFoundException;
 import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.ErrorResponse;
 import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.HubspotErrorResponse;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
@@ -20,14 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 @Slf4j
 public class CustomExceptionHandler {
-
-  private void log(Exception ex) {
-    log.error(ex.getMessage());
-  }
-
-  private ErrorResponse createErrorResponse(final Throwable ex) {
-    return new ErrorResponse(ex.getMessage());
-  }
 
   @ExceptionHandler({Exception.class})
   public ResponseEntity<ErrorResponse> handleInternalServerException(final Exception ex) {
@@ -62,19 +52,33 @@ public class CustomExceptionHandler {
     return new ResponseEntity<>(createErrorResponse(ex), ex.getStatusCode());
   }
 
+  @ExceptionHandler({BusinessValidationException.class})
+  public ResponseEntity<ErrorResponse> handleBusinessValidationException(
+      final BusinessValidationException ex) {
+    log(ex);
+    return new ResponseEntity<>(createErrorResponse(ex), HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<Map<String, List<String>>> handleValidationErrors(
-      MethodArgumentNotValidException ex) {
+  public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
+    log(ex);
     List<String> errors =
         ex.getBindingResult().getFieldErrors().stream()
             .map(field -> "%s %s".formatted(field.getField(), field.getDefaultMessage()))
             .toList();
-    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+
+    return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
   }
 
-  private Map<String, List<String>> getErrorsMap(List<String> errors) {
-    Map<String, List<String>> errorResponse = new HashMap<>();
-    errorResponse.put("errors", errors);
-    return errorResponse;
+  private void log(Exception ex) {
+    log.error(ex.getMessage(), ex);
+  }
+
+  private ErrorResponse createErrorResponse(final Throwable ex) {
+    return new ErrorResponse(ex.getMessage());
+  }
+
+  private ErrorResponse createErrorResponse(final BusinessValidationException ex) {
+    return new ErrorResponse(ex.getErrors());
   }
 }

@@ -1,5 +1,6 @@
-package com.example.hubspotintegrationapi.usecases.contacts;
+package com.example.hubspotintegrationapi.usecases.contacts.validators;
 
+import com.example.hubspotintegrationapi.domain.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.domain.validation.Validator;
@@ -18,10 +19,11 @@ public class ContactEmailExistsValidator implements Validator<String> {
   @Override
   public Optional<ValidationError> validate(@NonNull final String contactEmail) {
     return contactsRestClientGateway
-        .findByEmail(contactEmail)
-        .map(
-            (contact ->
-                new ValidationError(
-                    ErrorMessage.CONTACT_EMAIL_ALREADY_EXISTS, contact.getEmail())));
+            .findByEmail(contactEmail)
+            .map(this::mapToValidationError);
+  }
+
+  private ValidationError mapToValidationError(@NonNull final Contact contact) {
+    return new ValidationError(ErrorMessage.CONTACT_EMAIL_ALREADY_EXISTS, contact.getEmail());
   }
 }

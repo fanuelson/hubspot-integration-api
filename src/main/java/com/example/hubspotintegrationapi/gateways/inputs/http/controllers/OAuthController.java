@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.controllers;
 
-import com.example.hubspotintegrationapi.domain.OAuth2TokenHubSpotResponse;
+import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.OAuth2TokenResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -89,26 +89,26 @@ public class OAuthController {
     body.add(OAuth2ParameterNames.REDIRECT_URI, redirectUri);
     body.add(OAuth2ParameterNames.CODE, code);
 
-    OAuth2TokenHubSpotResponse oAuth2TokenHubSpotResponse =
+    OAuth2TokenResponse oAuth2TokenResponse =
         RestClient.create(tokenUri)
             .post()
             .uri(tokenUri)
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             .body(body)
             .retrieve()
-            .body(OAuth2TokenHubSpotResponse.class);
+            .body(OAuth2TokenResponse.class);
 
     ClientRegistration clientRegistration = getClientRegistrationHubSpot();
 
     OAuth2AccessToken accessToken =
         new OAuth2AccessToken(
             OAuth2AccessToken.TokenType.BEARER,
-            oAuth2TokenHubSpotResponse.getAccessToken(),
+            oAuth2TokenResponse.getAccessToken(),
             Instant.now(),
-            Instant.now().plusSeconds(oAuth2TokenHubSpotResponse.getExpiresIn()));
+            Instant.now().plusSeconds(oAuth2TokenResponse.getExpiresIn()));
 
     OAuth2RefreshToken refreshToken =
-        new OAuth2RefreshToken(oAuth2TokenHubSpotResponse.getRefreshToken(), Instant.now());
+        new OAuth2RefreshToken(oAuth2TokenResponse.getRefreshToken(), Instant.now());
 
     // Cria o OAuth2AuthorizedClient
     Authentication principal = SecurityContextHolder.getContext().getAuthentication();

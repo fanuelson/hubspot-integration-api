@@ -15,6 +15,8 @@ public class CreateContactResponse extends PropertiesWrapper<LinkedHashMap<Strin
   private LocalDateTime createdAt;
 
   public Contact toDomain(@NonNull final Contact contact) {
-    return contact.withId(this.getId()).withCreatedAt(this.getCreatedAt());
+    return contact
+            .withId(this.id)
+            .withCreatedAt(this.createdAt);
   }
 }
