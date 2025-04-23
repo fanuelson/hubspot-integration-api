@@ -1,12 +1,11 @@
 package com.example.hubspotintegrationapi.domain.validation;
 
-import java.io.Serializable;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 @Getter
-public class ValidationError implements Serializable {
+public class ValidationError {
 
   private final String error;
 

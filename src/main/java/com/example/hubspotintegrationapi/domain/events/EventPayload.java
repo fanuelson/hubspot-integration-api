@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 @Getter
 @With
 @ToString
-public class EventPayload implements Serializable {
+public class EventPayload {
 
   private final EventType eventType;
   private final String eventId;

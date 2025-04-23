@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.springframework.lang.NonNull;
 
 @Getter
-public class ValidationsResult implements Serializable {
+public class ValidationsResult {
 
   private final List<ValidationError> errors;
 

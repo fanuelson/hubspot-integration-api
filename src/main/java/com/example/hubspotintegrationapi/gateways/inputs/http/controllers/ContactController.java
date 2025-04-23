@@ -19,7 +19,7 @@ public class ContactController {
   private final CreateContact createContact;
 
   @PostMapping
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.CREATED)
   public CreateContactResponse create(@RequestBody @Valid final CreateContactRequest request) {
     val contact = createContact.execute(request.toDomain());
     return new CreateContactResponse(contact);

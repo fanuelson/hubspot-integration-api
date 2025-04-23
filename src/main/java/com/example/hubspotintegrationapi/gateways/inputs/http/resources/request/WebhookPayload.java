@@ -12,7 +12,7 @@ import org.springframework.lang.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class WebhookPayload implements Serializable {
+public class WebhookPayload {
 
   private String subscriptionType;
   private String eventId;

@@ -47,6 +47,7 @@ Exemplo: ```a.b.c.ngrok-free.app/webhook```
 
 ![img_2.png](img_2.png)
 ![img_3.png](img_3.png)
+![img_4.png](img_4.png)
 
 #### 6. Gerar URL de autorização
 
