@@ -6,11 +6,12 @@
 
 ## Prerequisites
 
+- Docker
 - Docker compose 2
 
 ## Run
 
-1. Adicionar CLIENT_ID e CLIENT_SECRET fornecidos pelo hubspot ao application.yml 
+1. Adicionar ```CLIENT_ID``` e ```CLIENT_SECRET``` fornecidos pelo hubspot ao application.yml 
 2. Executar a aplicação:
 ```
 $ docker compose up -d
