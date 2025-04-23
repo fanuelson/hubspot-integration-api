@@ -14,8 +14,6 @@ import org.springframework.lang.NonNull;
 @Getter
 public class WebhookPayload implements Serializable {
 
-  @Serial private static final long serialVersionUID = 1L;
-
   private String subscriptionType;
   private String eventId;
 

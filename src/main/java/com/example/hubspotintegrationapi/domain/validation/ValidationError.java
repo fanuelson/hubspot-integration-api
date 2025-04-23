@@ -1,6 +1,5 @@
 package com.example.hubspotintegrationapi.domain.validation;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -11,8 +10,6 @@ import org.springframework.lang.Nullable;
 
 @Getter
 public class ValidationError implements Serializable {
-
-  @Serial private static final long serialVersionUID = 1L;
 
   private final ErrorMessage errorMessage;
   private final List<? super Serializable> args;

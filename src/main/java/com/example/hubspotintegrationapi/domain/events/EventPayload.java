@@ -1,20 +1,15 @@
 package com.example.hubspotintegrationapi.domain.events;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.With;
 import org.springframework.lang.NonNull;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 @Getter
 @With
 @ToString
 public class EventPayload implements Serializable {
-
-  @Serial
-  private static final long serialVersionUID = 1L;
 
   private final EventType eventType;
   private final String eventId;
