@@ -5,7 +5,7 @@ spring:
         registration:
           hubspot:
             client-id: CLIENT_ID
-            client-secret: CLIENT_ID
+            client-secret: CLIENT_SECRET
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/oauth/callback"
             scope:

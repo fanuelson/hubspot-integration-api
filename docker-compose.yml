@@ -1,0 +1,5 @@
+services:
+  hubspot-integration-api:
+    build: .
+    ports:
+      - "8080:8080"
