@@ -1,6 +1,7 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.resources.request;
 
 import com.example.hubspotintegrationapi.domain.contacts.Contact;
+import com.example.hubspotintegrationapi.gateways.inputs.http.validators.annotations.ContactEmailNonExistent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateContactRequest {
 
-  @NotBlank private final String email;
+  @NotBlank
+  @ContactEmailNonExistent
+  private final String email;
+
   @NotBlank private final String firstName;
   @NotBlank private final String lastName;
 

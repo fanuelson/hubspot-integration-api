@@ -64,7 +64,7 @@ public class CustomExceptionHandler {
     log(ex);
     List<String> errors =
         ex.getBindingResult().getFieldErrors().stream()
-            .map(field -> "%s %s".formatted(field.getField(), field.getDefaultMessage()))
+            .map(field -> "%s: %s".formatted(field.getField(), field.getDefaultMessage()))
             .toList();
 
     return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
