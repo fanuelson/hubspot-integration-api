@@ -10,10 +10,15 @@ import org.springframework.lang.NonNull;
 @ToString
 public class EventPayload {
 
+  private final EventHeaders eventHeaders;
   private final EventType eventType;
   private final String eventId;
 
-  public EventPayload(@NonNull final EventType eventType, @NonNull final String eventId) {
+  public EventPayload(
+      @NonNull final EventHeaders eventHeaders,
+      @NonNull final EventType eventType,
+      @NonNull final String eventId) {
+    this.eventHeaders = eventHeaders;
     this.eventType = eventType;
     this.eventId = eventId;
   }

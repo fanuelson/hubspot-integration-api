@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.exceptions;
 
-import lombok.NonNull;
+import org.springframework.lang.NonNull;
 import org.springframework.security.oauth2.core.OAuth2AuthorizationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 

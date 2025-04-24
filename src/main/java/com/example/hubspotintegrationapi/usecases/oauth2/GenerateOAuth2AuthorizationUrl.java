@@ -41,6 +41,6 @@ public class GenerateOAuth2AuthorizationUrl {
   }
 
   private ClientRegistration getClientRegistrationHubSpot() {
-    return clientRegistrationRepository.findByRegistrationId(HubspotRestClientProp.registrationId);
+    return clientRegistrationRepository.findByRegistrationId(HubspotRestClientProp.REGISTRATION_ID);
   }
 }

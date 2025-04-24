@@ -1,5 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.outputs.http.impl;
 
+import com.example.hubspotintegrationapi.config.restclient.CircuitBreakers;
 import com.example.hubspotintegrationapi.config.restclient.HubspotRestClientProp;
 import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.wrappers.PropertiesWrapper;
@@ -7,6 +8,8 @@ import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClien
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactRequestProperties;
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactResponse;
 import java.util.Optional;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,6 +27,7 @@ public class ContactsRestClientGatewayImpl implements ContactsRestClientGateway 
   private final RestClient restClient;
 
   @Override
+  @CircuitBreaker(name = CircuitBreakers.HUBSPOT_REST_CLIENT)
   public Optional<Contact> create(@NonNull final Contact contact) {
     val properties = new CreateContactRequestProperties(contact);
     val response =

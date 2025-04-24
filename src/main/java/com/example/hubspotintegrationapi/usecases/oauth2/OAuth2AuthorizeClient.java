@@ -4,10 +4,10 @@ import com.example.hubspotintegrationapi.config.restclient.HubspotRestClientProp
 import com.example.hubspotintegrationapi.domain.oauth2.OAuth2CallbackContext;
 import com.example.hubspotintegrationapi.exceptions.HubSpotOAuth2AuthorizationException;
 import com.example.hubspotintegrationapi.gateways.inputs.http.resources.response.OAuth2TokenResponse;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -59,7 +59,7 @@ public class OAuth2AuthorizeClient {
   }
 
   private ClientRegistration getClientRegistrationHubSpot() {
-    return clientRegistrationRepository.findByRegistrationId(HubspotRestClientProp.registrationId);
+    return clientRegistrationRepository.findByRegistrationId(HubspotRestClientProp.REGISTRATION_ID);
   }
 
   private MultiValueMap<String, String> mountBody(

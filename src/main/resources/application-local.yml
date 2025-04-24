@@ -24,14 +24,16 @@ rest-client:
     apiUrl: https://api.hubapi.com
     contactsResource: /crm/v3/objects/contacts
 
+management:
+  endpoints:
+    web:
+      exposure.include: '*'
+
 resilience4j.circuitbreaker:
   configs:
     default:
       registerHealthIndicator: true
-      slidingWindowSize: 4
-      minimumNumberOfCalls: 4
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10s
+      waitDurationInOpenState: 24h
       permittedNumberOfCallsInHalfOpenState: 3
       automaticTransitionFromOpenToHalfOpenEnabled: true
       recordExceptions:

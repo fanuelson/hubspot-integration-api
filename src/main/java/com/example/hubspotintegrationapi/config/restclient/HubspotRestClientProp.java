@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class HubspotRestClientProp {
 
-  public static final String registrationId = "hubspot";
+  public static final String REGISTRATION_ID = "hubspot";
   @NotBlank private String apiUrl;
   @NotBlank private String contactsResource;
 }

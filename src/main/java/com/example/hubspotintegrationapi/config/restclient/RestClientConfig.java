@@ -16,14 +16,17 @@ public class RestClientConfig {
   private final HubspotRestClientProp hubspotRestClientProp;
 
   @Bean
-  public RestClient restClient(final OAuth2AuthorizedClientManager authorizedClientManager) {
+  public RestClient restClient(
+      final OAuth2AuthorizedClientManager authorizedClientManager,
+      final HubSpotRateLimiterInterceptor hubSpotRateLimiterInterceptor) {
     val interceptor = new OAuth2ClientHttpRequestInterceptor(authorizedClientManager);
     return RestClient.builder()
         .requestInitializer(
             request ->
                 RequestAttributeClientRegistrationIdResolver.clientRegistrationId(
-                        HubspotRestClientProp.registrationId)
+                        HubspotRestClientProp.REGISTRATION_ID)
                     .accept(request.getAttributes()))
+        .requestInterceptor(hubSpotRateLimiterInterceptor)
         .requestInterceptor(interceptor)
         .baseUrl(hubspotRestClientProp.getApiUrl())
         .build();
