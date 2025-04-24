@@ -38,7 +38,6 @@ resilience4j.circuitbreaker:
       automaticTransitionFromOpenToHalfOpenEnabled: true
       recordExceptions:
         - java.io.IOException
-        - com.example.hubspotintegrationapi.gateways.outputs.http.exceptions.RateLimitException
   instances:
     HubSpotRestClient:
       baseConfig: default

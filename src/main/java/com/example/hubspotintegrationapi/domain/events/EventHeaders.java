@@ -2,9 +2,11 @@ package com.example.hubspotintegrationapi.domain.events;
 
 import java.util.Map;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.lang.NonNull;
 
 @Getter
+@ToString
 public class EventHeaders {
 
   private final SignatureVersion signatureVersion;

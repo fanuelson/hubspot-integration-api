@@ -17,7 +17,7 @@ public enum SignatureVersion {
 
   public static Optional<SignatureVersion> getOptional(final String value) {
     return Stream.of(values())
-        .filter(version -> version.getVersion().equalsIgnoreCase(value))
+        .filter(signatureVersion -> signatureVersion.getVersion().equalsIgnoreCase(value))
         .findFirst();
   }
 
