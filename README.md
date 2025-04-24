@@ -52,13 +52,6 @@ http://localhost:8080/oauth/authorize
 
 #### 7. Acessar swagger para salvar contatos
 
-Iniciar fluxo oauth:
-
-http://localhost:8080/oauth/authorize
-
-OU
-
-Via swagger
 http://localhost:8080/swagger-ui/index.html
 
 ## Using
