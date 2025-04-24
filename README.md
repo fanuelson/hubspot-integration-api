@@ -18,16 +18,13 @@
 
 ## Run
 
-#### 1. Adicionar ```CLIENT_ID``` e ```CLIENT_SECRET``` fornecidos pelo hubspot ao application.yml 
+#### 1. Adicionar ```CLIENT_ID``` e ```CLIENT_SECRET``` fornecidos pelo hubspot ao ```application-local.yml``` 
 
 #### 2. Subir a aplicação:
 
 ```
 docker compose up -d
 ```
-
-Acessar:
-http://localhost:8080/swagger-ui/index.html
 
 #### 3. Usar ngrok para registar webhook para o localhost
 
@@ -55,6 +52,13 @@ http://localhost:8080/oauth/authorize
 
 #### 7. Acessar swagger para salvar contatos
 
+Iniciar fluxo oauth:
+
+http://localhost:8080/oauth/authorize
+
+OU
+
+Via swagger
 http://localhost:8080/swagger-ui/index.html
 
 ## Using

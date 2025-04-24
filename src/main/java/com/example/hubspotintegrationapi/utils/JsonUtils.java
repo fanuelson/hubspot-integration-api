@@ -26,6 +26,18 @@ public class JsonUtils {
     }
   }
 
+  public static <T> Optional<T> toObject(
+      @NonNull final String json, @NonNull final Class<T> clazz) {
+    try {
+      val objectMapper = getObjectMapper();
+      T obj = objectMapper.readValue(json, clazz);
+      return Optional.of(obj);
+    } catch (Exception e) {
+      log.error("Error to convert JSON to Object", e);
+      return Optional.empty();
+    }
+  }
+
   private static ObjectMapper getObjectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

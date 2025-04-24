@@ -1,6 +1,5 @@
 package com.example.hubspotintegrationapi.domain.events;
 
-import java.io.Serializable;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.With;

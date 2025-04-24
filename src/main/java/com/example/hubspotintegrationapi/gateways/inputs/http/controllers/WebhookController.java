@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -31,7 +33,7 @@ public class WebhookController {
   private String clientSecret;
 
   @PostMapping
-  @ResponseStatus(HttpStatus.NO_CONTENT)
+  @ResponseStatus(HttpStatus.OK)
   public void handleWebhook(
       @RequestHeader("X-HubSpot-Signature-v3") final String signatureV3,
       @RequestHeader("X-HubSpot-Request-Timestamp") final Long timestamp,
@@ -49,21 +51,19 @@ public class WebhookController {
       optionalPayloads.ifPresent(
           webhookPayloads ->
               webhookPayloads.forEach(
-                  (webhookPayload -> {
-                    EventType.getOptional(webhookPayload.getSubscriptionType())
-                        .ifPresent(
-                            (eventType -> {
-                              val handler = getEventHandler.execute(eventType);
-                              handler.handle(webhookPayload.toDomain());
-                            }));
-                  })));
+                  (webhookPayload -> EventType.getOptional(webhookPayload.getSubscriptionType())
+                      .ifPresent(
+                          (eventType -> {
+                            val handler = getEventHandler.execute(eventType);
+                            handler.handle(webhookPayload.toDomain());
+                          })))));
 
     } catch (Exception e) {
       log.error("Erro ao processar webhook", e);
     }
   }
 
-  private void isValidTimestamp(final Long timestamp) {
+  private void isValidTimestamp(@NonNull final Long timestamp) {
     val durationInMinutes =
         ChronoUnit.MINUTES.between(Instant.ofEpochMilli(timestamp), Instant.now());
 
@@ -73,14 +73,14 @@ public class WebhookController {
   }
 
   private void isValidSignature(
-      String signatureV3, HttpServletRequest request, Long timestamp, String rawBody) {
+      final String signatureV3, final HttpServletRequest request, final Long timestamp, final String rawBody) {
     // Monta a URI original
-    String uri = request.getRequestURL().toString();
+    val uri = request.getRequestURL().toString();
     // String que será assinada
-    String rawString = request.getMethod() + uri + rawBody + timestamp;
+    val rawString = request.getMethod() + uri + rawBody + timestamp;
 
     // Gera o hash com HMAC SHA256 + base64
-    String hashedString = HashUtils.generateHmacSHA256Base64(rawString, clientSecret);
+    val hashedString = HashUtils.generateHmacSHA256Base64(rawString, clientSecret);
 
     // FIXME: Not working, signature and rawString hash always different ;/
     // val invalidSignature = BooleanUtils.negate(MessageDigest.isEqual(hashedString.getBytes(),

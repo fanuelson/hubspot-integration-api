@@ -1,0 +1,42 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          hubspot:
+            client-id: CLIENT_ID
+            client-secret: CLIENT_SECRET
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/oauth/callback"
+            scope:
+              - crm.objects.contacts.read
+              - crm.objects.contacts.write
+        provider:
+          hubspot:
+            authorization-uri: https://app.hubspot.com/oauth/authorize
+            token-uri: https://api.hubapi.com/oauth/v1/token
+  devtools:
+    restart:
+      enabled: true
+
+rest-client:
+  hubspot:
+    apiUrl: https://api.hubapi.com
+    contactsResource: /crm/v3/objects/contacts
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 4
+      minimumNumberOfCalls: 4
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10s
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      recordExceptions:
+        - java.io.IOException
+        - com.example.hubspotintegrationapi.gateways.outputs.http.exceptions.RateLimitException
+  instances:
+    HubSpotRestClient:
+      baseConfig: default

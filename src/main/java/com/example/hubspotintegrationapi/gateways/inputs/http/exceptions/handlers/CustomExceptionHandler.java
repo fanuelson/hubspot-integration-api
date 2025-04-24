@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -23,6 +24,11 @@ public class CustomExceptionHandler {
   public ResponseEntity<ErrorResponse> handleInternalServerException(final Exception ex) {
     log(ex);
     return new ResponseEntity<>(createErrorResponse(ex), HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  @ExceptionHandler({NoResourceFoundException.class})
+  public ResponseEntity<ErrorResponse> handleNoResourceFoundException(final NoResourceFoundException ex) {
+    return new ResponseEntity<>(new ErrorResponse(HttpStatus.NOT_FOUND.getReasonPhrase()), HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler({NotFoundException.class})
@@ -60,7 +66,7 @@ public class CustomExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
+  public ResponseEntity<ErrorResponse> handleValidationErrors(final MethodArgumentNotValidException ex) {
     log(ex);
     List<String> errors =
         ex.getBindingResult().getFieldErrors().stream()
@@ -70,12 +76,16 @@ public class CustomExceptionHandler {
     return new ResponseEntity<>(new ErrorResponse(errors), HttpStatus.BAD_REQUEST);
   }
 
-  private void log(Exception ex) {
+  private void log(final Exception ex) {
     log.error(ex.getMessage(), ex);
   }
 
   private ErrorResponse createErrorResponse(final Throwable ex) {
     return new ErrorResponse(ex.getMessage());
+  }
+
+  private ErrorResponse createErrorResponse(final OAuth2AuthorizationException ex) {
+    return new ErrorResponse(ex.getError().toString());
   }
 
   private ErrorResponse createErrorResponse(final BusinessValidationException ex) {

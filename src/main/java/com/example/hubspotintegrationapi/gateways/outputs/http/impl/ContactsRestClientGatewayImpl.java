@@ -8,11 +8,13 @@ import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateC
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContactsRestClientGatewayImpl implements ContactsRestClientGateway {

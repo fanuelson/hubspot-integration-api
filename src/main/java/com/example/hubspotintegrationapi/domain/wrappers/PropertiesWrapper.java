@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PropertiesWrapper<T> {
   private T properties;
 
-  public static <T> PropertiesWrapper<T> create(T prop) {
+  public static <T> PropertiesWrapper<T> create(final T prop) {
     return new PropertiesWrapper<>(prop);
   }
 }

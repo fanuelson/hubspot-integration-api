@@ -9,7 +9,7 @@ public class ValidationError {
 
   private final String error;
 
-  public ValidationError(@NonNull final ErrorMessage errorMessage, @Nullable Object... args) {
+  public ValidationError(@NonNull final ErrorMessage errorMessage, @Nullable final Object... args) {
     this.error = errorMessage.getMessageTemplate().formatted(args);
   }
 }
