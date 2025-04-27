@@ -26,6 +26,8 @@ public class HubSpotRateLimiterInterceptor implements ClientHttpRequestIntercept
       HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
     val response = execution.execute(request, body);
     logHubSpotResponseHeaders(response);
+    // HubSpot retorna error code 429 quando ultrapassa o rate limit, documentação:
+    // https://developers.hubspot.com/docs/guides/apps/api-usage/usage-details#error-responses
     if (HttpStatus.TOO_MANY_REQUESTS.isSameCodeAs(response.getStatusCode())) {
       log.error("HubSpot rate limit reached");
       circuitBreakerRegistry
