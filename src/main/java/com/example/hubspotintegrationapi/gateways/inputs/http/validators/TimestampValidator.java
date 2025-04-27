@@ -18,15 +18,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimestampValidator implements Validator<TimestampValidationContext> {
 
+  public static final int MAX_EVENT_AGE_IN_MINUTES = 5;
+
   @Override
   public Optional<ValidationError> validate(@NonNull final TimestampValidationContext context) {
     val timestamp = context.timestamp();
     val durationInMinutes = ChronoUnit.MINUTES.between(ofEpochMilli(timestamp), now());
 
-    if (Math.abs(durationInMinutes) > 5) {
+    if (Math.abs(durationInMinutes) > MAX_EVENT_AGE_IN_MINUTES) {
       return Optional.of(
           new ValidationError(ErrorMessage.INVALID_TIMESTAMP, timestamp.toString()));
     }
+
     return Optional.empty();
   }
 }
