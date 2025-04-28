@@ -4,7 +4,7 @@ import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.domain.validation.Validator;
-import com.example.hubspotintegrationapi.gateways.outputs.ContactsRestClientGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.ContactsClientGateway;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ContactEmailExistsValidator implements Validator<String> {
 
-  private final ContactsRestClientGateway contactsRestClientGateway;
+  private final ContactsClientGateway contactsClientGateway;
 
   @Override
   public Optional<ValidationError> validate(@NonNull final String contactEmail) {
-    return contactsRestClientGateway
+    return contactsClientGateway
             .findByEmail(contactEmail)
             .map(this::mapToValidationError);
   }

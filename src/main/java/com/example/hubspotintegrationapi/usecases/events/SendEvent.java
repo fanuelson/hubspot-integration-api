@@ -1,7 +1,7 @@
 package com.example.hubspotintegrationapi.usecases.events;
 
 import com.example.hubspotintegrationapi.domain.events.EventPayload;
-import com.example.hubspotintegrationapi.gateways.outputs.HubSpotEventMessageGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.EventMessageGateway;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SendEvent {
-  private final HubSpotEventMessageGateway hubSpotEventMessageGateway;
+  private final EventMessageGateway eventMessageGateway;
 
   public void execute(@NonNull final EventPayload eventPayload) {
-    this.hubSpotEventMessageGateway.sendHubSpotWebhookProcessor(eventPayload);
+    this.eventMessageGateway.sendMessageProcessor(eventPayload);
   }
 }

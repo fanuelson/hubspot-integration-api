@@ -2,7 +2,7 @@ package com.example.hubspotintegrationapi.gateways.outputs;
 
 import com.example.hubspotintegrationapi.domain.events.EventPayload;
 
-public interface HubSpotEventMessageGateway {
+public interface EventMessageGateway {
 
-  void sendHubSpotWebhookProcessor(final EventPayload eventPayload);
+  void sendMessageProcessor(final EventPayload eventPayload);
 }

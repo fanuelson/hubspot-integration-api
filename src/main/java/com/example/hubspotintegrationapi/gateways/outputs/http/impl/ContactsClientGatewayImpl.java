@@ -4,7 +4,7 @@ import com.example.hubspotintegrationapi.config.restclient.CircuitBreakers;
 import com.example.hubspotintegrationapi.config.restclient.HubspotRestClientProp;
 import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.wrappers.PropertiesWrapper;
-import com.example.hubspotintegrationapi.gateways.outputs.ContactsRestClientGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.ContactsClientGateway;
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactRequestProperties;
 import com.example.hubspotintegrationapi.gateways.outputs.http.resources.CreateContactResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -19,7 +19,7 @@ import org.springframework.web.client.RestClient;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ContactsRestClientGatewayImpl implements ContactsRestClientGateway {
+public class ContactsClientGatewayImpl implements ContactsClientGateway {
 
   private final HubspotRestClientProp hubspotRestClientProp;
 

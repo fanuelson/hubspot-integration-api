@@ -8,7 +8,7 @@ import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
-import com.example.hubspotintegrationapi.gateways.outputs.ContactsRestClientGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.ContactsClientGateway;
 import com.example.hubspotintegrationapi.mocks.ContactMocks;
 import com.example.hubspotintegrationapi.usecases.contacts.validators.ContactEmailExistsValidator;
 import java.util.Optional;
@@ -27,7 +27,7 @@ class CreateContactTest {
 
   @InjectMocks private CreateContact createContact;
 
-  @Mock private ContactsRestClientGateway contactsRestClientGateway;
+  @Mock private ContactsClientGateway contactsClientGateway;
 
   @Mock private ContactEmailExistsValidator contactEmailExistsValidator;
 
@@ -36,7 +36,7 @@ class CreateContactTest {
     val createContactInput = ContactMocks.createContactValidMock();
 
     when(contactEmailExistsValidator.validate(any())).thenReturn(Optional.empty());
-    when(contactsRestClientGateway.create(any(Contact.class)))
+    when(contactsClientGateway.create(any(Contact.class)))
         .thenThrow(ClientAuthorizationRequiredException.class);
 
     assertThrows(ClientAuthorizationRequiredException.class, () -> createContact.execute(createContactInput));
@@ -48,7 +48,7 @@ class CreateContactTest {
     val createContactInput = ContactMocks.createContactValidMock().withEmail(invalidEmail);
 
     when(contactEmailExistsValidator.validate(any())).thenReturn(Optional.empty());
-    when(contactsRestClientGateway.create(any(Contact.class)))
+    when(contactsClientGateway.create(any(Contact.class)))
             .thenThrow(HttpClientErrorException.BadRequest.class);
 
     assertThrows(HttpClientErrorException.BadRequest.class, () -> createContact.execute(createContactInput));
@@ -72,7 +72,7 @@ class CreateContactTest {
     val expectedCreateContactOutput = createContactInput.withId("1");
 
     when(contactEmailExistsValidator.validate(any())).thenReturn(Optional.empty());
-    when(contactsRestClientGateway.create(any(Contact.class)))
+    when(contactsClientGateway.create(any(Contact.class)))
         .thenReturn(Optional.of(createContactInput.withId("1")));
 
     val contactOutput = createContact.execute(createContactInput);
