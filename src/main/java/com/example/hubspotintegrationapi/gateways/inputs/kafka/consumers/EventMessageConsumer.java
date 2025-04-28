@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class HubSpotWebhookProcessorConsumer extends BaseConsumer {
+public class EventMessageConsumer extends BaseConsumer {
 
   private final GetEventHandler getEventHandler;
 
