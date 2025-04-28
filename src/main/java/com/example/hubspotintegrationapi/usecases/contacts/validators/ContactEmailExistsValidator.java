@@ -4,7 +4,7 @@ import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.domain.validation.Validator;
-import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.ContactsRestClientGateway;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;

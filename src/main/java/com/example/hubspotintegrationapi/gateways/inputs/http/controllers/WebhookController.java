@@ -10,6 +10,7 @@ import com.example.hubspotintegrationapi.gateways.inputs.http.validators.Timesta
 import com.example.hubspotintegrationapi.gateways.inputs.http.validators.context.SignatureV1ValidationContext;
 import com.example.hubspotintegrationapi.gateways.inputs.http.validators.context.TimestampValidationContext;
 import com.example.hubspotintegrationapi.usecases.events.GetEventHandler;
+import com.example.hubspotintegrationapi.usecases.events.SendEvent;
 import com.example.hubspotintegrationapi.utils.JsonUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/webhook")
 public class WebhookController {
 
-  private final GetEventHandler getEventHandler;
+  private final SendEvent sendEvent;
 
   private final SignatureValidatorV1 signatureValidatorV1;
   private final TimestampValidator timestampValidator;
@@ -64,15 +65,7 @@ public class WebhookController {
         .forEachRemaining(headerName -> headers.put(headerName, request.getHeader(headerName)));
     try {
       optionalPayloads.ifPresent(
-          webhookPayloads ->
-              webhookPayloads.forEach(
-                  (webhookPayload ->
-                      EventType.getOptional(webhookPayload.getSubscriptionType())
-                          .ifPresent(
-                              (eventType -> {
-                                val handler = getEventHandler.execute(eventType);
-                                handler.handle(webhookPayload.withEventHeaders(headers).toDomain());
-                              })))));
+          webhookPayloads -> webhookPayloads.forEach((webhookPayload -> sendEvent.execute(webhookPayload.withEventHeaders(headers).toDomain()))));
 
     } catch (Exception e) {
       log.error("Erro ao processar webhook", e);

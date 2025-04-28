@@ -1,4 +1,4 @@
-package com.example.hubspotintegrationapi.gateways.outputs.http;
+package com.example.hubspotintegrationapi.gateways.outputs;
 
 import com.example.hubspotintegrationapi.domain.contacts.Contact;
 

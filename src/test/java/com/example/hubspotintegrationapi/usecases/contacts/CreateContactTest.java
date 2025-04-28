@@ -8,7 +8,7 @@ import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.domain.validation.ErrorMessage;
 import com.example.hubspotintegrationapi.domain.validation.ValidationError;
 import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
-import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.ContactsRestClientGateway;
 import com.example.hubspotintegrationapi.mocks.ContactMocks;
 import com.example.hubspotintegrationapi.usecases.contacts.validators.ContactEmailExistsValidator;
 import java.util.Optional;

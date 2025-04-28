@@ -15,6 +15,24 @@ spring:
           hubspot:
             authorization-uri: https://app.hubspot.com/oauth/authorize
             token-uri: https://api.hubapi.com/oauth/v1/token
+  kafka:
+#    bootstrap-servers: localhost:9092 # running with java
+    bootstrap-servers: kafka:29092 # use this when running inside docker
+    producer:
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      batch-size: 16384
+      buffer-memory: 33554432
+      acks: all
+    consumer:
+      group-id: hubspot-integration-api-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+    topics:
+      hubspotWebhookProcessor: hubspot-integration-api.hubspot.webhook.processor
+
   devtools:
     restart:
       enabled: true

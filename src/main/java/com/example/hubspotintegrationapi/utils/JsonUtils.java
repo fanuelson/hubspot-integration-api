@@ -1,5 +1,6 @@
 package com.example.hubspotintegrationapi.utils;
 
+import com.example.hubspotintegrationapi.exceptions.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,27 +15,35 @@ import org.springframework.lang.NonNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JsonUtils {
 
+  private static final String ERROR_TO_CONVERT_JSON_TO_OBJECT = "Error to convert Json to Object";
+  private static final String ERROR_TO_CONVERT_OBJECT_TO_JSON = "Error to convert Object to Json";
+
   public static <T> Optional<T> toObject(
       @NonNull final String json, @NonNull final TypeReference<T> typeReference) {
     try {
       val objectMapper = getObjectMapper();
       T obj = objectMapper.readValue(json, typeReference);
       return Optional.of(obj);
-    } catch (Exception e) {
-      log.error("Error to convert JSON to Object", e);
-      return Optional.empty();
+    } catch (Exception ex) {
+      throw new JsonParseException(ERROR_TO_CONVERT_JSON_TO_OBJECT, ex);
     }
   }
 
-  public static <T> Optional<T> toObject(
-      @NonNull final String json, @NonNull final Class<T> clazz) {
+  public static <T> T toObject(@NonNull final String json, @NonNull final Class<T> clazz) {
     try {
       val objectMapper = getObjectMapper();
-      T obj = objectMapper.readValue(json, clazz);
-      return Optional.of(obj);
-    } catch (Exception e) {
-      log.error("Error to convert JSON to Object", e);
-      return Optional.empty();
+      return objectMapper.readValue(json, clazz);
+    } catch (Exception ex) {
+      throw new JsonParseException(ERROR_TO_CONVERT_JSON_TO_OBJECT, ex);
+    }
+  }
+
+  public static String toJson(final Object object) {
+    try {
+      val objectMapper = getObjectMapper();
+      return objectMapper.writeValueAsString(object);
+    } catch (Exception ex) {
+      throw new JsonParseException(ERROR_TO_CONVERT_OBJECT_TO_JSON, ex);
     }
   }
 

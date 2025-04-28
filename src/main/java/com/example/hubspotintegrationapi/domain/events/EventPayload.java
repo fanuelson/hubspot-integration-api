@@ -1,6 +1,7 @@
 package com.example.hubspotintegrationapi.domain.events;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.With;
 import org.springframework.lang.NonNull;
@@ -8,12 +9,13 @@ import org.springframework.lang.NonNull;
 @Getter
 @With
 @ToString
+@NoArgsConstructor
 public class EventPayload {
 
-  private final EventHeaders eventHeaders;
-  private final EventType eventType;
-  private final String eventId;
-  private final String objectId;
+  private EventHeaders eventHeaders;
+  private EventType eventType;
+  private String eventId;
+  private String objectId;
 
   public EventPayload(
       @NonNull final EventHeaders eventHeaders,

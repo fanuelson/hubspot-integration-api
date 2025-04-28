@@ -4,18 +4,20 @@ import java.util.Map;
 
 import com.example.hubspotintegrationapi.domain.context.HubSpotHeaderNames;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
 
 @Getter
 @ToString
+@NoArgsConstructor
 public class EventHeaders {
 
-  private final SignatureVersion signatureVersion;
-  private final String signature;
-  private final String signatureV3;
-  private final String timeoutMillis;
-  private final String requestTimestamp;
+  private SignatureVersion signatureVersion;
+  private String signature;
+  private String signatureV3;
+  private String timeoutMillis;
+  private String requestTimestamp;
 
   public EventHeaders(@NonNull final Map<String, String> headers) {
     this.signatureVersion = SignatureVersion.get(headers.get(HubSpotHeaderNames.SIGNATURE_VERSION));

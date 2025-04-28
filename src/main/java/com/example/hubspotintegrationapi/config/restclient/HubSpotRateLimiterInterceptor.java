@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -24,18 +25,29 @@ public class HubSpotRateLimiterInterceptor implements ClientHttpRequestIntercept
   @Override
   public ClientHttpResponse intercept(
       HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+
+    //Apenas para simular o rate limiter do hubspot
+    //Enviar email="openCircuitBreaker" ao criar contato
+    val openCircuitBreaker = ObjectUtils.defaultIfNull((boolean) request.getAttributes().get("openCircuitBreaker"), false);
+    if(openCircuitBreaker) {
+      this.openCircuitBreaker();
+    }
     val response = execution.execute(request, body);
     logHubSpotResponseHeaders(response);
     // HubSpot retorna error code 429 quando ultrapassa o rate limit, documentação:
     // https://developers.hubspot.com/docs/guides/apps/api-usage/usage-details#error-responses
     if (HttpStatus.TOO_MANY_REQUESTS.isSameCodeAs(response.getStatusCode())) {
-      log.error("HubSpot rate limit reached");
-      circuitBreakerRegistry
-          .circuitBreaker(CircuitBreakers.HUBSPOT_REST_CLIENT)
-          .transitionToOpenState();
+      this.openCircuitBreaker();
     }
 
     return response;
+  }
+
+  private void openCircuitBreaker() {
+    log.error("HubSpot rate limit reached");
+    circuitBreakerRegistry
+        .circuitBreaker(CircuitBreakers.HUBSPOT_REST_CLIENT)
+        .transitionToOpenState();
   }
 
   public void logHubSpotResponseHeaders(final ClientHttpResponse response) {

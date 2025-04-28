@@ -2,7 +2,7 @@ package com.example.hubspotintegrationapi.usecases.contacts;
 
 import com.example.hubspotintegrationapi.domain.contacts.Contact;
 import com.example.hubspotintegrationapi.exceptions.BusinessValidationException;
-import com.example.hubspotintegrationapi.gateways.outputs.http.ContactsRestClientGateway;
+import com.example.hubspotintegrationapi.gateways.outputs.ContactsRestClientGateway;
 import com.example.hubspotintegrationapi.usecases.contacts.validators.ContactEmailExistsValidator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,17 @@ public class CreateContact {
   private final ContactEmailExistsValidator contactEmailExistsValidator;
 
   public Contact execute(@NonNull final Contact contact) {
-    contactEmailExistsValidator
-        .validate(contact.getEmail())
-        .ifPresent(validationError -> {
-            throw new BusinessValidationException(List.of(validationError));
-        });
-    return contactsRestClientGateway.create(contact).orElseThrow();
+      try {
+          contactEmailExistsValidator
+                  .validate(contact.getEmail())
+                  .ifPresent(validationError -> {
+                      throw new BusinessValidationException(List.of(validationError));
+                  });
+          return contactsRestClientGateway.create(contact).orElseThrow();
+      } catch (Exception ex) {
+          log.info("need to save contact to process later");
+          throw ex;
+      }
+
   }
 }
