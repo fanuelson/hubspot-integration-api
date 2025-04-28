@@ -1,6 +1,6 @@
 package com.example.hubspotintegrationapi.gateways.inputs.http.controllers;
 
-import com.example.hubspotintegrationapi.domain.events.EventHeaderNames;
+import com.example.hubspotintegrationapi.domain.context.HubSpotHeaderNames;
 import com.example.hubspotintegrationapi.domain.events.EventType;
 import com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.InvalidSignatureException;
 import com.example.hubspotintegrationapi.gateways.inputs.http.exceptions.InvalidTimestampException;
@@ -35,8 +35,8 @@ public class WebhookController {
   @PostMapping
   @ResponseStatus(HttpStatus.OK)
   public void handleWebhook(
-      @RequestHeader(EventHeaderNames.SIGNATURE) final String signature,
-      @RequestHeader(EventHeaderNames.REQUEST_TIMESTAMP) final Long timestamp,
+      @RequestHeader(HubSpotHeaderNames.SIGNATURE) final String signature,
+      @RequestHeader(HubSpotHeaderNames.REQUEST_TIMESTAMP) final Long timestamp,
       @RequestBody final String rawBody,
       HttpServletRequest request) {
     log.info("Webhook received: {}", rawBody);

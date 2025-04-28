@@ -19,8 +19,9 @@ public class WebhookPayload {
   private Map<String, String> eventHeaders;
   private String subscriptionType;
   private String eventId;
+  private String objectId;
 
   public EventPayload toDomain() {
-    return new EventPayload(new EventHeaders(eventHeaders), EventType.get(this.subscriptionType), eventId);
+    return new EventPayload(new EventHeaders(eventHeaders), EventType.get(this.subscriptionType), eventId, objectId);
   }
 }
